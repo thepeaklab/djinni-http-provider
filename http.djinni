@@ -1,0 +1,41 @@
+http_method = enum {
+    get;
+    head;
+    post;
+    put;
+    delete;
+    connect;
+    options;
+    trace;
+    patch;
+}
+
+http_error_code = enum {
+    ok;
+    client_error;
+    server_error;
+    parsing_error;
+}
+
+http_request = record {
+    method: http_method;
+    url: string;
+    header: map<string, string>;
+    body: binary;
+}
+
+http_response = record {
+    request: http_request;
+    status_code: i16;
+    header: map<string, string>;
+    body: binary;
+}
+
+http_perform_result = record {
+    response: optional<http_response>;
+    error_code: http_error_code;
+}
+
+http_provider = interface +o +j {
+    perform(request: http_request): http_perform_result;
+}
